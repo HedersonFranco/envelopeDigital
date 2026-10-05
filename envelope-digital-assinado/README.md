@@ -43,7 +43,7 @@ programas de outros grupos, com o [CyberChef](https://gchq.github.io/CyberChef/)
 - **Gerar pares de chaves** RSA em PEM (com senha opcional), compatíveis com o OpenSSL.
 - Codificação **Base64** ou **Hex**, à escolha do usuário.
 - Duas interfaces: **linha de comando** (subcomandos) e **menu interativo**.
-- Tratamento de erros completo: feito com o glorioso *stack trace*.
+- Tratamento de erros completo: feito com um glorioso *stack trace*.
 
 ## Requisitos
 
