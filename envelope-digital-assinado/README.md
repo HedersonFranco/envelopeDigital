@@ -6,9 +6,8 @@ e o criptograma é assinado com **RSA (PKCS#1 v1.5) + SHA-2**, na abordagem
 **Encrypt-then-Sign**. O resultado é um único arquivo **JSON**, interoperável com
 programas de outros grupos, com o [CyberChef](https://gchq.github.io/CyberChef/) e com o OpenSSL.
 
-> Trabalho 01 (Implementação: Envelope Digital Assinado) da disciplina
-> **Segurança em Sistemas Computacionais**, Bacharelado em Ciência da Computação,
-> Universidade Federal do Piauí (UFPI). Professor: Carlos André Batista de Carvalho.
+> Trabalho da disciplina
+> **Segurança em Sistemas Computacionais**; Professor: Carlos André Batista de Carvalho.
 >
 > **Integrantes:** Hederson Franco Benvindo Lima · João Guilherme Oliveira Pereira · David Soares Pereira Junior
 
