@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Chaves e saídas criadas durante o uso (nunca versione chaves privadas reais!)
+/chaves/
+*.pem
+/envelope.json
+/mensagem_decifrada.txt
+
+# Exemplos gerados (vão no pacote de entrega; recrie com scripts/gerar_exemplos.py)
+exemplos/gerados/
+
+# Editores / sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

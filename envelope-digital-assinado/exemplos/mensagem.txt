@@ -1,0 +1,8 @@
+Trabalho 01 — Envelope Digital Assinado
+Segurança em Sistemas Computacionais — UFPI
+
+Esta é uma mensagem de teste com acentuação (ação, coração, pé, você),
+símbolos (§ ° ✓ €) e emoji (🔐), para validar a codificação UTF-8.
+
+O envelope usa AES-256-CBC para o conteúdo, RSA-OAEP para a chave de sessão
+e assinatura RSA (PKCS#1 v1.5) sobre o criptograma: Encrypt-then-Sign.
