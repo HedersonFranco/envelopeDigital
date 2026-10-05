@@ -43,11 +43,11 @@ programas de outros grupos, com o [CyberChef](https://gchq.github.io/CyberChef/)
 - **Gerar pares de chaves** RSA em PEM (com senha opcional), compatíveis com o OpenSSL.
 - Codificação **Base64** ou **Hex**, à escolha do usuário.
 - Duas interfaces: **linha de comando** (subcomandos) e **menu interativo**.
-- Tratamento de erros completo: nenhuma falha encerra o programa com *stack trace*.
+- Tratamento de erros completo: feito com o glorioso *stack trace*.
 
 ## Requisitos
 
-- **Python 3.9 ou superior** (testado de 3.9 a 3.13)
+- **Python 3.14.5 ou superior** (testado no Python 3.14.5)
 - Biblioteca [`cryptography`](https://cryptography.io/) ≥ 41
 - Windows, Linux ou macOS
 - Opcional: `pytest` para rodar os testes e OpenSSL 3.x para os testes de interoperabilidade
