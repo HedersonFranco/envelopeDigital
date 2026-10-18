@@ -99,7 +99,6 @@ def test_chaves_trocadas(arquivos, capsys):
     assert main(["cifrar", "-e", arquivos["msg"], "--pub-destinatario", arquivos["dest_priv"],
                  "--priv-remetente", arquivos["rem_priv"], "-o", arquivos["env"]]) == 1
     _cifrar(arquivos)
-    # destinatário usa a própria pública no lugar da privada do remetente etc.
     assert main(["decifrar", "-e", arquivos["env"], "--priv-destinatario", arquivos["rem_priv"],
                  "--pub-remetente", arquivos["rem_pub"], "-o", arquivos["saida"]]) == 1
     assert main(["decifrar", "-e", arquivos["env"], "--priv-destinatario", arquivos["dest_priv"],
@@ -123,7 +122,7 @@ def test_ajuda_e_versao(capsys):
 def test_gerar_chaves_cli(tmp_path, capsys):
     pasta = str(tmp_path / "k")
     assert main(["gerar-chaves", "--nome", "teste", "--pasta", pasta]) == 0
-    assert main(["gerar-chaves", "--nome", "teste", "--pasta", pasta]) == 1  # já existe
+    assert main(["gerar-chaves", "--nome", "teste", "--pasta", pasta]) == 1
     assert main(["gerar-chaves", "--nome", "teste", "--pasta", pasta, "--sobrescrever"]) == 0
     _sem_traceback(capsys)
 
@@ -139,7 +138,6 @@ def test_erro_inesperado_nao_mostra_traceback(arquivos, capsys, monkeypatch):
     assert "falha simulada" in _sem_traceback(capsys).err
 
 
-# ------------------------------------------------------------------ menu
 def _alimentar(monkeypatch, respostas):
     fila = iter(respostas)
 

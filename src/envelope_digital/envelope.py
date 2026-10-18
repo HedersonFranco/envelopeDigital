@@ -32,7 +32,6 @@ from .erros import (
     FormatoEnvelopeErro,
 )
 
-# Valores fixos definidos pelo protocolo.
 ALGORITMO_SIMETRICO = "AES-256-CBC"
 PADDING_SIMETRICO = "PKCS7"
 ALGORITMO_CHAVE = "RSA-OAEP"
@@ -90,7 +89,6 @@ class ResultadoAbertura:
             return None
 
 
-# ============================================================== criação
 def criar_envelope(
     mensagem: bytes | str,
     publica_destinatario: rsa.RSAPublicKey,
@@ -102,24 +100,15 @@ def criar_envelope(
     if isinstance(mensagem, str):
         mensagem = mensagem.encode("utf-8")
 
-    # 1. Segredos aleatórios
     chave = cripto.gerar_chave_sessao()
     iv = cripto.gerar_iv()
-
-    # 2. Codificação da chave de sessão (o TEXTO resultante é o que vai para o RSA)
     chave_txt = codificar(chave, p.codificacao)
-
-    # 3. Cifragem da chave de sessão com a pública do destinatário
     chave_cifrada = cripto.rsa_oaep_cifrar(publica_destinatario, chave_txt.encode("ascii"), p.hash_oaep)
 
-    # 4. Cifragem da mensagem
     criptograma = cripto.aes_cifrar(chave, iv, mensagem)
     mensagem_cifrada = codificar(criptograma, p.codificacao)
-
-    # 5. Assinatura sobre o criptograma CODIFICADO (Encrypt-then-Sign)
     assinatura = cripto.assinar(privada_remetente, mensagem_cifrada.encode("ascii"), p.hash_assinatura)
 
-    # 6. Montagem
     return {
         "parametros": p.para_json(),
         "envelope": {
@@ -131,7 +120,6 @@ def criar_envelope(
     }
 
 
-# ============================================================== validação
 def _compactar(valor: str) -> str:
     return "".join(c for c in valor.lower() if c.isalnum())
 
@@ -180,7 +168,6 @@ def validar_envelope(dados: Any) -> tuple[Parametros, dict[str, str], list[str]]
     return parametros, campos, avisos
 
 
-# ============================================================== abertura
 def verificar_assinatura(dados: Any, publica_remetente: rsa.RSAPublicKey) -> list[str]:
     """Verifica a assinatura do envelope. Lança ``AssinaturaInvalidaErro`` se não conferir.
 
@@ -258,18 +245,15 @@ def abrir_envelope(
     publica_remetente: rsa.RSAPublicKey,
 ) -> ResultadoAbertura:
     """Abre o envelope seguindo o protocolo Encrypt-then-Sign."""
-    # 1. Validação e leitura
     p, campos, avisos = validar_envelope(dados)
 
-    # 2. Verificação da assinatura ANTES de qualquer decifragem
+    # Verificação da assinatura ANTES de qualquer decifragem
     _verificar(p, campos, publica_remetente, avisos)
 
-    # 3. Recuperação da chave de sessão
     chave_cifrada = decodificar(campos["chave_sessao"], p.codificacao, "envelope.chave_sessao")
     chave_txt = cripto.rsa_oaep_decifrar(privada_destinatario, chave_cifrada, p.hash_oaep)
     chave = _recuperar_chave_sessao(chave_txt, p, avisos)
 
-    # 4. Decifragem da mensagem
     iv = decodificar(campos["iv"], p.codificacao, "envelope.iv")
     if len(iv) != cripto.TAMANHO_IV:
         raise FormatoEnvelopeErro(
@@ -280,7 +264,6 @@ def abrir_envelope(
     return ResultadoAbertura(texto=texto, parametros=p, avisos=avisos)
 
 
-# ============================================================== arquivos
 def ler_texto(caminho: str | Path) -> bytes:
     """Lê o arquivo de entrada e confirma que é texto UTF-8 (os bytes são preservados)."""
     caminho = Path(caminho)

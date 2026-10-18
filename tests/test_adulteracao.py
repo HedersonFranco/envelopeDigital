@@ -61,7 +61,7 @@ def test_iv_nao_e_coberto_pela_assinatura(env, remetente, destinatario):
     resultado = abrir_envelope(env, destinatario.privada, remetente.publica)
     original = TEXTO_EXEMPLO.encode()
     assert resultado.texto != original
-    assert resultado.texto[16:] == original[16:]  # só o primeiro bloco é afetado
+    assert resultado.texto[16:] == original[16:]
 
 
 def test_chave_privada_do_destinatario_errada(env, remetente, intruso):
@@ -141,7 +141,6 @@ def test_estrutura_invalida(dados, remetente, destinatario):
         abrir_envelope(copy.deepcopy(dados), destinatario.privada, remetente.publica)
 
 
-# ---------------------------------------------------------- compatibilidade
 def test_compat_chave_de_sessao_em_bytes_brutos(remetente, destinatario):
     """Outro grupo pode cifrar os 32 bytes brutos da chave: abre com aviso."""
     chave, iv = cripto.gerar_chave_sessao(), cripto.gerar_iv()

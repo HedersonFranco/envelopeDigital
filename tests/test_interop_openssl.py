@@ -35,7 +35,7 @@ COMBINACOES = list(itertools.product(["SHA-256", "SHA-512"], ["SHA-256", "SHA-51
 
 
 def _md(nome: str) -> str:
-    return nome.replace("-", "").lower()  # SHA-256 -> sha256
+    return nome.replace("-", "").lower()
 
 
 def _run(*args, entrada: bytes | None = None) -> bytes:
@@ -49,14 +49,12 @@ def test_envelope_do_programa_aberto_pelo_openssl(tmp_path, remetente, destinata
     env = criar_envelope(TEXTO_EXEMPLO, destinatario.publica, remetente.privada, Parametros(hash_oaep, hash_sig, cod))
     e = env["envelope"]
 
-    # 1. openssl dgst -verify (PKCS#1 v1.5) sobre o texto codificado do criptograma
     (tmp_path / "msg").write_bytes(e["mensagem_cifrada"].encode("ascii"))
     (tmp_path / "sig").write_bytes(decodificar(e["assinatura"], cod))
     saida = _run("dgst", f"-{_md(hash_sig)}", "-verify", remetente.publica_pem,
                  "-signature", tmp_path / "sig", tmp_path / "msg")
     assert b"Verified OK" in saida
 
-    # 2. openssl pkeyutl -decrypt com OAEP e MGF1 usando o mesmo hash
     (tmp_path / "k").write_bytes(decodificar(e["chave_sessao"], cod))
     chave_txt = _run("pkeyutl", "-decrypt", "-inkey", destinatario.privada_pem, "-in", tmp_path / "k",
                      "-pkeyopt", "rsa_padding_mode:oaep", "-pkeyopt", f"rsa_oaep_md:{_md(hash_oaep)}",
@@ -64,7 +62,6 @@ def test_envelope_do_programa_aberto_pelo_openssl(tmp_path, remetente, destinata
     chave = decodificar(chave_txt, cod)
     assert len(chave) == 32
 
-    # 3. openssl enc -d -aes-256-cbc
     texto = _run("enc", "-d", "-aes-256-cbc", "-K", chave.hex(), "-iv", decodificar(e["iv"], cod).hex(),
                  entrada=decodificar(e["mensagem_cifrada"], cod))
     assert texto.decode("utf-8") == TEXTO_EXEMPLO

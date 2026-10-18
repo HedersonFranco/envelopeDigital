@@ -20,8 +20,8 @@ from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
 from .erros import ChaveInvalidaErro, DecifragemErro, FormatoEnvelopeErro
 
-TAMANHO_CHAVE_AES = 32  # 256 bits
-TAMANHO_IV = 16  # 128 bits = tamanho do bloco AES
+TAMANHO_CHAVE_AES = 32
+TAMANHO_IV = 16
 TAMANHO_BLOCO_BITS = 128
 
 SHA256 = "SHA-256"
@@ -47,7 +47,6 @@ def _hash(nome: str) -> hashes.HashAlgorithm:
     return HASHES[normalizar_hash(nome)]()
 
 
-# ---------------------------------------------------------------- aleatoriedade
 def gerar_chave_sessao() -> bytes:
     """Chave AES-256 aleatória (CSPRNG do sistema operacional)."""
     return os.urandom(TAMANHO_CHAVE_AES)
@@ -58,7 +57,6 @@ def gerar_iv() -> bytes:
     return os.urandom(TAMANHO_IV)
 
 
-# ---------------------------------------------------------------- AES-256-CBC
 def aes_cifrar(chave: bytes, iv: bytes, texto: bytes) -> bytes:
     _checar_aes(chave, iv)
     preenchedor = padding.PKCS7(TAMANHO_BLOCO_BITS).padder()
@@ -97,7 +95,6 @@ def _checar_aes(chave: bytes, iv: bytes) -> None:
         )
 
 
-# ---------------------------------------------------------------- RSA-OAEP
 def _oaep(nome_hash: str) -> rsa_padding.OAEP:
     algoritmo = _hash(nome_hash)
     return rsa_padding.OAEP(mgf=rsa_padding.MGF1(algorithm=algoritmo), algorithm=algoritmo, label=None)
@@ -132,7 +129,6 @@ def rsa_oaep_decifrar(privada: rsa.RSAPrivateKey, dados: bytes, nome_hash: str) 
         ) from None
 
 
-# ---------------------------------------------------------------- assinatura
 def assinar(privada: rsa.RSAPrivateKey, dados: bytes, nome_hash: str) -> bytes:
     return privada.sign(dados, rsa_padding.PKCS1v15(), _hash(nome_hash))
 

@@ -58,13 +58,11 @@ def main() -> int:
     dest_pub = carregar_chave_publica(pasta_chaves / "destinatario_publica.pem")
     texto = (EXEMPLOS / "mensagem.txt").read_bytes()
 
-    # 8 combinações válidas
     for hash_oaep, hash_sig, cod in itertools.product(("SHA-256", "SHA-512"), ("SHA-256", "SHA-512"), ("Base64", "Hex")):
         p = Parametros(hash_oaep, hash_sig, cod)
         nome = f"envelope_oaep-{hash_oaep.lower()}_assin-{hash_sig.lower()}_{cod.lower()}.json"
         salvar_envelope(criar_envelope(texto, dest_pub, rem_priv, p), DESTINO / "envelopes" / nome)
 
-    # Envelopes com defeitos propositais
     base = criar_envelope(texto, dest_pub, rem_priv, Parametros())
     adulterados = {}
 

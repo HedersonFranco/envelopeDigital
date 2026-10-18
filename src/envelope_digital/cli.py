@@ -52,7 +52,6 @@ if callable(_gettext_original):
     argparse._ = _traduzir  # type: ignore[attr-defined]
 
 
-# ------------------------------------------------------------------ tipos argparse
 def _tipo_hash(valor: str) -> str:
     try:
         return normalizar_hash(valor)
@@ -96,7 +95,6 @@ def construir_parser() -> argparse.ArgumentParser:
     parser.add_argument("--versao", action="version", version=f"%(prog)s {__version__}")
     sub = parser.add_subparsers(dest="comando", metavar="COMANDO", parser_class=_Parser)
 
-    # gerar-chaves
     g = sub.add_parser("gerar-chaves", help="gera um par de chaves RSA em PEM")
     g.add_argument("--nome", required=True, metavar="NOME", help="prefixo dos arquivos (ex.: remetente, destinatario)")
     g.add_argument("--pasta", default="chaves", metavar="PASTA", help="pasta de destino (padrão: chaves)")
@@ -104,7 +102,6 @@ def construir_parser() -> argparse.ArgumentParser:
     g.add_argument("--com-senha", action="store_true", help="protege a chave privada com senha")
     g.add_argument("--sobrescrever", action="store_true", help="substitui chaves existentes com o mesmo nome")
 
-    # cifrar
     c = sub.add_parser("cifrar", help="cria o envelope (cifra e assina)")
     origem = c.add_mutually_exclusive_group(required=True)
     origem.add_argument("-e", "--entrada", metavar="ARQUIVO", help="arquivo de texto UTF-8 a cifrar")
@@ -117,7 +114,6 @@ def construir_parser() -> argparse.ArgumentParser:
     c.add_argument("--codificacao", type=_tipo_codificacao, metavar="COD", default="Base64", help="Base64 (padrão) ou Hex")
     c.add_argument("--pedir-senha", action="store_true", help="pergunta a senha da chave privada")
 
-    # decifrar
     d = sub.add_parser("decifrar", help="abre o envelope (verifica a assinatura e decifra)")
     d.add_argument("-e", "--envelope", required=True, metavar="JSON", help="arquivo JSON do envelope")
     d.add_argument("--priv-destinatario", required=True, metavar="PEM", help="chave privada do destinatário (PEM)")
@@ -127,7 +123,6 @@ def construir_parser() -> argparse.ArgumentParser:
     d.add_argument("--mostrar", action="store_true", help="também exibe o texto decifrado no terminal")
     d.add_argument("--pedir-senha", action="store_true", help="pergunta a senha da chave privada")
 
-    # verificar
     v = sub.add_parser("verificar", help="apenas verifica a assinatura do envelope")
     v.add_argument("-e", "--envelope", required=True, metavar="JSON", help="arquivo JSON do envelope")
     v.add_argument("--pub-remetente", required=True, metavar="PEM", help="chave pública do remetente (PEM)")
@@ -142,7 +137,6 @@ def _senha(pedir: bool, rotulo: str = "Senha da chave privada: ") -> str | None:
     return getpass.getpass(rotulo) or None
 
 
-# ------------------------------------------------------------------ execução
 def _executar(args: argparse.Namespace) -> int:
     if args.comando == "gerar-chaves":
         senha = None
@@ -228,9 +222,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(file=sys.stderr)
         saida.erro("Operação interrompida pelo usuário.")
         return 130
-    except SystemExit as exc:  # argparse (--help, --versao, uso incorreto)
+    except SystemExit as exc:
         return exc.code if isinstance(exc.code, int) else 0
-    except Exception as exc:  # noqa: BLE001 - rede de segurança: nunca mostrar stack trace
+    except Exception as exc:  # noqa: BLE001
         saida.erro(f"Erro inesperado ({type(exc).__name__}): {exc}")
         saida.info("Se o problema persistir, abra uma issue com o comando executado.")
         return 1

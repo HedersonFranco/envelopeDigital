@@ -110,7 +110,6 @@ def senha_se_necessario(caminho: str) -> str | None:
         return None  # o erro real será mostrado pela operação
 
 
-# ------------------------------------------------------------------ ações
 def acao_gerar() -> None:
     nome = perguntar("Nome do par (ex.: remetente, destinatario)")
     pasta = perguntar("Pasta de destino", "chaves")
@@ -224,7 +223,7 @@ def executar_menu() -> int:
         except _Sair:
             print()
             return 0
-        except Exception as exc:  # noqa: BLE001 - o menu nunca deve fechar por erro
+        except Exception as exc:  # noqa: BLE001
             saida.erro(f"Erro inesperado ({type(exc).__name__}): {exc}")
         try:
             _ler("\nPressione Enter para continuar...")

@@ -50,7 +50,6 @@ def test_tamanhos_e_conteudo_conforme_especificacao(remetente, destinatario, cod
     env = criar_envelope(TEXTO_EXEMPLO, destinatario.publica, remetente.privada, p)
     e = env["envelope"]
 
-    # IV de 16 bytes
     assert len(decodificar(e["iv"], cod)) == 16
 
     # Passo 3: o RSA-OAEP cifra o TEXTO codificado da chave de 32 bytes
@@ -91,7 +90,7 @@ def test_leitura_tolerante_de_parametros(remetente, destinatario):
     env = criar_envelope("tolerante", destinatario.publica, remetente.privada, Parametros("SHA-512", "SHA-512", "Hex"))
     env["parametros"].update(hash_oaep="sha512", hash_assinatura="SHA_512", codificacao="HEX",
                              padding_simetrico="PKCS#5", algoritmo_simetrico="aes-256-cbc")
-    env["envelope"]["mensagem_cifrada"] = env["envelope"]["mensagem_cifrada"].upper()  # Hex maiúsculo
+    env["envelope"]["mensagem_cifrada"] = env["envelope"]["mensagem_cifrada"].upper()
     # A assinatura é sobre o texto exato do campo; ao trocar o caso, ela deixa de conferir.
     from envelope_digital.erros import AssinaturaInvalidaErro
 

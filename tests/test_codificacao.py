@@ -16,7 +16,7 @@ def test_formato_canonico():
     assert codificar(b"\xff\x00\xab", "Hex") == "ff00ab"
     assert codificar(b"\xff\x00\xab", "Base64") == "/wCr"
     longo = codificar(os.urandom(500), "Base64")
-    assert "\n" not in longo  # sempre em uma linha
+    assert "\n" not in longo
 
 
 def test_leitura_tolerante():

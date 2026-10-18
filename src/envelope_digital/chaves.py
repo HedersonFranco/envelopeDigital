@@ -156,7 +156,7 @@ def gerar_par_de_chaves(
     except OSError as exc:
         raise ArquivoErro(f"Não foi possível gravar as chaves em {pasta}: {exc.strerror}") from None
     try:
-        caminho_priv.chmod(0o600)  # sem efeito prático no Windows
+        caminho_priv.chmod(0o600)
     except OSError:
         pass
     return caminho_priv, caminho_pub
