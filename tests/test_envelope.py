@@ -74,7 +74,7 @@ def test_segredos_aleatorios_a_cada_envelope(remetente, destinatario):
         assert a["envelope"][campo] != b["envelope"][campo]
 
 
-@pytest.mark.parametrize("texto", [b"", b"a", b"x" * 16, b"y" * 1_000_000])
+@pytest.mark.parametrize("texto", [b"", b"a", b"x" * 16, b"y" * 1_000_000], ids=["vazio", "1byte", "16bytes", "1MB"])
 def test_tamanhos_de_mensagem(remetente, destinatario, texto):
     env = criar_envelope(texto, destinatario.publica, remetente.privada)
     assert abrir_envelope(env, destinatario.privada, remetente.publica).texto == texto
