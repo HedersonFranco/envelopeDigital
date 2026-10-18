@@ -6,8 +6,7 @@ destinatário e o criptograma é assinado com a chave privada do remetente
 (*Encrypt-then-Sign*). O envelope é um arquivo JSON que também pode ser aberto no
 [CyberChef](https://gchq.github.io/CyberChef/) e no OpenSSL.
 
-Trabalho 01 da disciplina Segurança em Sistemas Computacionais (Ciência da Computação, UFPI),
-prof. Carlos André Batista de Carvalho.
+Trabalho da disciplina Segurança em Sistemas Computacionais
 
 ## Como funciona
 
